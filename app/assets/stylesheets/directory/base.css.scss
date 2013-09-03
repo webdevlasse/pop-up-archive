@@ -964,63 +964,10 @@ form.with-tags {
 	padding: 15px 0;
 }
 
-.brochure.slide-span {
-  height: 240px;
-  background-color: rgb(255, 255, 255);
-  padding: 8px;
-
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  border-radius: 4px;
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.05);
-}
-
-.slide-span a:hover {
-  text-decoration: none;  
-}
-
-.slide-span .title {
-  margin-left: 4px;
-  color: #FF974D;
-}
-
-.slide-span .content {
-  color: #FF974D;
-  font-size: 16px;
-  margin: 4px;
-}
-
-.slide-span .image {
-  display: block;
-  padding: 14px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.number-circle {
-  padding: 0px;
-  margin: 0px 0px 0px 0px;
-  overflow: hidden;
-  display: block;
-  float: left;
-  width: 20px;
-  height: 20px;
-  position: relative;
-  border-radius:50%;
-  -moz-border-radius:50%;
-  -webkit-border-radius:50%;
-  -khtml-border-radius: 50%;
-  background: #F25A4C;
-
-  font-family: "soleil", sans-serif !important;
-  text-shadow: none !important;
-
-  text-align: center;
-  color: rgb(255, 255, 255);
-  font-size: 18px;
-  line-height: 16px;
+#feature-image {
+  background: #fff image-url('mlk_speech_women.jpg') no-repeat 1024px 450px;
+  width: 1024px;
+  height: 450px;
 }
 
 .tutorial-step {
