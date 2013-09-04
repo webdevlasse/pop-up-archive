@@ -1010,10 +1010,48 @@ form.with-tags {
 }
 
 #feature-image {
-  background: #fff image-url('mlk_speech_women.jpg') no-repeat 1024px 450px;
-  width: 1024px;
-  height: 450px;
+  background: #fff image-url("mlk_speech_women.jpg") no-repeat;
+  width: 940px;
+  height: 413px;
+  text-align: center;
+  position: relative;
+  
+  #content {
+    width: auto;
+    height: 50%;
+    overflow: auto;
+    margin: auto;
+    position: absolute;
+    top: 0; left: 0; bottom: 0; right: 0;
+  }
+  
+  h2 {
+    color: #fff;
+  }
+  
+  a {
+    text-decoration: none;
+    color: #fff;
+  }
+  a.featurebtn {
+    display: inline-block;
+    border-radius: 40px;
+    border: none;
+    width: 120px;
+    font-family: soleil;
+    padding:10px;
+    background-color:#85D0F1;
+    margin: 15px;
+  }
+  a.featurebtn:nth-child(2){
+    background-color:#8581A1;
+  }
+  
+  a.featurebtn:nth-child(3){
+    background-color:#E0D90E;
+  };
 }
+
 
 .tutorial-step {
   font-size: 14px;
