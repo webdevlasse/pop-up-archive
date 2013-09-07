@@ -7,6 +7,7 @@ node(:total_hits) { @search.total }
 node(:max_score) { @search.max_score }
 node(:page) { ((@search.options[:from] || 0) / RESULTS_PER_PAGE) + 1 }
 node(:query) { params[:query] }
+node(:recent){@recent}
 
 child @search.results do
 
