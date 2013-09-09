@@ -4,5 +4,5 @@ angular.module('Directory.dashboard.controllers', ['Directory.loader', 'Director
   Me.authenticated(function (data) {
   });
 
- $scope.recent=@recent;
+  // $scope.recent=@recent;
 }])

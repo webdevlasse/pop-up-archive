@@ -1,9 +1,12 @@
 class Api::V1::SearchesController < Api::V1::BaseController
+
+  expose :search_result
+
   def show
     query_builder = QueryBuilder.new(params, current_user)
     page = params[:page].to_i
 
-    @search = ItemResultsPresenter.new(Tire.search(index_name) do
+    self.search_result = ItemResultsPresenter.new(Tire.search(index_name) do
 
       if page.present? && page > 1
         from (page - 1) * RESULTS_PER_PAGE
@@ -25,19 +28,26 @@ class Api::V1::SearchesController < Api::V1::BaseController
       highlight transcript: { number_of_fragments: 0 }
     end.results)
       
-    respond_with @search
+    respond_with :api, search_result
   end
 
-  def index
-    @recent =  ItemResultsPresenter.new(Tire.search('items') do
+  def recent
+    query_builder = QueryBuilder.new(params, current_user)
+    list_size = params[:size] ? params[:size].to_i : 6
+
+    self.search_result = ItemResultsPresenter.new(Tire.search(index_name) do
+    
       query_builder.query do
         string '*'
       end
       
-      sort {by :updated_at, 'desc'}      
-      size 6
-      end.results)
-    respond with @recent
+      sort {by :created_at, 'desc'}
+      
+      size list_size
+    
+    end.results)
+    
+    respond_with :api, search_result
   end
   
   private

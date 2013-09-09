@@ -22,7 +22,10 @@ PopUpArchive::Application.routes.draw do
       get '/me' => 'users#me'
       get '/users/me' => 'users#me'
 
-      resource :search
+      resource :search do
+        get 'recent', action: 'recent'
+      end
+
       resources :items do
         resources :audio_files do
           post '',                    action: 'update'
