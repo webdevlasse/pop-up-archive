@@ -1,14 +1,5 @@
-object nil
-
-
-node(:DEBUG) { true } if @debug
-node(:facets) { @search.facets }
-node(:total_hits) { @search.total }
-node(:max_score) { @search.max_score }
-node(:page) { ((@search.options[:from] || 0) / RESULTS_PER_PAGE) + 1 }
-node(:query) { params[:query] }
-
-child @search.results do
+collection @recent
+child @recent.results do
 
   attribute :id
   attribute :title, if: ->(o) { o.title.present? }
@@ -29,9 +20,5 @@ child @search.results do
 
   child(:entities, if: ->(o) { o.entities.present? }) do |e|
     extends 'api/v1/entities/entity'
-  end
-
-  node(:highlights, if: ->(o) { o.highlighted_audio_files.present? }) do |i|
-    {audio_files: partial('api/v1/audio_files/audio_file', object: i.highlighted_audio_files) }
   end
 end
