@@ -1,13 +1,12 @@
 class Api::V1::SearchesController < Api::V1::BaseController
 
-  expose :search_result
+  expose :search_result do; end
 
   def show
     query_builder = QueryBuilder.new(params, current_user)
     page = params[:page].to_i
 
-    self.search_result = ItemResultsPresenter.new(Tire.search(index_name) do
-
+    tire_results = Tire.search('items') do
       if page.present? && page > 1
         from (page - 1) * RESULTS_PER_PAGE
       end
@@ -26,8 +25,10 @@ class Api::V1::SearchesController < Api::V1::BaseController
       end
 
       highlight transcript: { number_of_fragments: 0 }
-    end.results)
-      
+    end.results
+
+    self.search_result = ItemResultsPresenter.new(tire_results)
+
     respond_with :api, search_result
   end
 
