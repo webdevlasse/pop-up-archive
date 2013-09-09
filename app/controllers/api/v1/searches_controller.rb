@@ -24,7 +24,11 @@ class Api::V1::SearchesController < Api::V1::BaseController
 
       highlight transcript: { number_of_fragments: 0 }
     end.results)
-    
+      
+    respond_with @search
+  end
+
+  def index
     @recent =  ItemResultsPresenter.new(Tire.search('items') do
       query_builder.query do
         string '*'
@@ -33,10 +37,9 @@ class Api::V1::SearchesController < Api::V1::BaseController
       sort {by :updated_at, 'desc'}      
       size 6
       end.results)
-      
-    respond_with @recent && @search
+    respond with @recent
   end
-
+  
   private
 
   def index_name
@@ -47,4 +50,5 @@ class Api::V1::SearchesController < Api::V1::BaseController
       'items'
     end
   end
+    
 end
