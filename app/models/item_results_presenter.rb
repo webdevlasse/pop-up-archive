@@ -16,6 +16,10 @@ class ItemResultsPresenter < BasicObject
     method == :results || @results.respond_to?(method)
   end
 
+  def logger
+    ::Rails.logger
+  end
+
   def method_missing(method, *args)
     if @results.respond_to?(method)
       @results.send method, *args
@@ -33,7 +37,7 @@ class ItemResultsPresenter < BasicObject
     end
 
     def database_object
-      @_result ||= ::Item.find(id)
+      @_result ||= ::Item.find_by_id(id)
     end
 
     def audio_files
@@ -66,6 +70,10 @@ class ItemResultsPresenter < BasicObject
 
     def class
       ::Result
+    end
+
+    def logger
+      ::Rails.logger
     end
 
     private
