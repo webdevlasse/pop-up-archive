@@ -17,68 +17,6 @@
   user-select: none;
 }
 
-.brochure {
-  color: #7C7B81;
-  background: none;
-  font-family: "freight-text-pro", serif;
-  font-size: 22px;
-  padding: 0;
-
-  h1 {
-    color: #B59B6D;
-    font-family: "soleil", sans-serif !important;
-    font-weight: 800;
-    font-size: 32px !important;
-    line-height: 38px;
-    margin-bottom: 12px;
-  }
-
-  h3 {
-    color: #B59B6D;
-    font-family: "soleil", sans-serif !important;
-    margin-top: 26px;
-    padding-top: 15px;
-  }
-
-  h4 {
-    color: #B59B6D;
-    font-family: "soleil", sans-serif;
-    margin-top: 25px;
-    font-size: 22px;
-    font-weight: 800;
-  }
-
-  p {
-    line-height: 1.25em;
-  }
-
-  ul.big {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-
-    li {
-      display: block;
-      float: left;
-      max-width: 200px;
-
-      a {
-        display: block;
-        border-top: 6px solid white;
-        margin-right: 25px;
-        color: #7d7c82;
-        font-size: 24px;
-        cursor: pointer;
-
-        &:hover {
-          border-top: 6px solid #5970B1;
-          text-decoration: none;
-        }
-      }
-    }
-  }
-}
-
 .file-drop-zone-overlay {
   text-align: center;
   padding-top: 200px;
@@ -1006,6 +944,26 @@ form.with-tags {
     background-color:#E0D90E;
   };
 }
+
+.featured-collection {
+  float:left;
+  display:inline-block;
+  width:300px;
+  text-align: center;
+  margin: 20px 0px;
+  
+  a{
+    text-decoration: none;
+    color: #7C7B81;
+  }
+  a:hover{
+    color: #5970B1;
+  }
+}
+
+.featured-collection:nth-child(2){
+  margin: 20px 20px;
+};
 
 
 .tutorial-step {
