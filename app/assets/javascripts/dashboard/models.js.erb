@@ -1,5 +1,0 @@
-angular.module('Directory.dashboard.models', ['RailsModel', 'Directory.items.models'])
-.factory('Dashboard', ['Model', '$http', function (Model, $http) {
-  var Dashboard = Model({url:'/api/last_items', name: 'last_items'});
-  return Dashboard;
-}]);

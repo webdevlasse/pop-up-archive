@@ -1,5 +1,5 @@
 angular.module('Directory.searches.models', ['RailsModel', 'Directory.items.models'])
-.factory('Search', ['Model', 'Item', 'Facet',  function (Model, Item, Facet) {
+.factory('Search', ['Model', 'Item', 'Facet', '$http', function (Model, Item, Facet, $http) {
   var Search = Model({url:'/api/search', name: 'search'});
 
   Search.prototype.lastItemNumber = function () {
@@ -34,6 +34,12 @@ angular.module('Directory.searches.models', ['RailsModel', 'Directory.items.mode
         aFacetIsVisible = true;
     });
     return aFacetIsVisible;
+  }
+
+  Search.recent = function() {
+    return Search.processResponse($http.get('/api/search/recent')).then(function (search_result) {
+      return search_result;
+    });
   }
 
   return Search;
@@ -244,3 +250,4 @@ angular.module('Directory.searches.models', ['RailsModel', 'Directory.items.mode
 
   return Query;
 }]);
+
