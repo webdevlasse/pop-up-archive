@@ -110,11 +110,18 @@ GEM
       ffi (~> 1.0, >= 1.0.11)
     chronic (0.9.1)
     coderay (1.0.9)
+    columnize (0.3.6)
     connection_pool (1.1.0)
     copyrighter (1.0.0)
     curb (0.8.4)
     dalli (2.6.4)
     debug_inspector (0.0.2)
+    debugger (1.6.1)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.2.0)
+      debugger-ruby_core_source (~> 1.2.3)
+    debugger-linecache (1.2.0)
+    debugger-ruby_core_source (1.2.3)
     decent_exposure (2.1.0)
     devise (3.0.0)
       bcrypt-ruby (~> 3.0)
@@ -448,6 +455,7 @@ DEPENDENCIES
   chronic
   copyrighter
   dalli
+  debugger
   decent_exposure (~> 2.1.0)
   devise
   devise_invitable!
