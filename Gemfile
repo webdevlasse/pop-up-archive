@@ -94,6 +94,7 @@ group :assets do
 end
 
 group :development do
+  gem 'debugger'
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
@@ -134,3 +135,4 @@ group :development, :production, :staging do
   gem 'foreman'
   gem 'unicorn'
 end
+
