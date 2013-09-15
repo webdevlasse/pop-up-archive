@@ -23,7 +23,10 @@ PopUpArchive::Application.routes.draw do
 
       resource :search do
         get 'recent', action: 'recent'
+        get 'explore', action: 'explore'
       end
+      
+      resource :explore
 
       resources :items do
         resources :audio_files do
