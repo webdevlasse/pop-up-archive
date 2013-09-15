@@ -51,6 +51,20 @@ class Api::V1::SearchesController < Api::V1::BaseController
     respond_with :api, search_result
   end
   
+  def explore
+    my_letter= "A"
+    my_facet= :series_title
+    query_builder = QueryBuilder.new(params, current_user)
+    self.search_result = Tire.search 'items', my_facet => 'count' do
+      query {string 'series_title:' + my_letter + '*'}
+        facet my_facet.to_s do
+          terms my_facet, :order => 'term'
+        end 
+       
+    end.results  
+    respond_with :api, search_result
+  end
+  
   private
 
   def index_name
