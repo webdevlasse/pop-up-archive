@@ -1,0 +1,14 @@
+.row
+  .span12
+    .browse
+     ul 
+      li ng-repeat="letter in letters"
+       / a ng-click="my_letter.commit({{letter}})" {{letter}}
+       
+.row
+  .results
+    .span4 
+      li ng-repeat= "term in {{$scope.facets.series_title.terms}}"
+    .span4
+    .span4
+      
