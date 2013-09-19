@@ -52,8 +52,8 @@ class Api::V1::SearchesController < Api::V1::BaseController
   end
   
   def explore
-    my_letter="A"
-    my_facet=:series_title
+    my_letter = params[:letter]
+    my_facet = params[:facet]
     #get alphabetical tire results with term and count only
     self.search_result = Tire.search index_name, my_facet => 'count' do 
       query {string my_facet.to_s + ':' + my_letter + '*'}

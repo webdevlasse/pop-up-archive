@@ -3,12 +3,12 @@
     .browse
      ul 
       li ng-repeat="letter in letters"
-       / a ng-click="my_letter.commit({{letter}})" {{letter}}
+       a ng-click="setLetter(letter)" {{letter}}
        
 .row
   .results
     .span4 
-      li ng-repeat= "term in {{$scope.facets.series_title.terms}}"
+      li ng-repeat="term in terms" {{term}}
     .span4
     .span4
       
