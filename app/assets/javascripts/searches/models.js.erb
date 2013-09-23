@@ -36,7 +36,7 @@ angular.module('Directory.searches.models', ['RailsModel', 'Directory.items.mode
     return aFacetIsVisible;
   }
 
-  Search.recent = function() {
+  Search.constructor.prototype.recent = function() {
     return Search.processResponse($http.get('/api/search/recent')).then(function (search_result) {
       return search_result;
     });
@@ -44,6 +44,7 @@ angular.module('Directory.searches.models', ['RailsModel', 'Directory.items.mode
 
   return Search;
 }])
+
 .factory('Facet', ['Collection', function (Collection) {
   function FacetEntry(name, count, field) {
     this.name = name;
@@ -249,5 +250,7 @@ angular.module('Directory.searches.models', ['RailsModel', 'Directory.items.mode
   }
 
   return Query;
-}]);
-
+}])
+.factory('Exploration', ['Model', function (Model) {
+  return Model({url:'/api/search/explore', name: 'explore'});
+}])

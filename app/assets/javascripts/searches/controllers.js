@@ -13,19 +13,21 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
     $scope.query = new Query();
   }
 }])
-.controller('ExploreCtrl', ['$scope', '$location', 'Exploration', '$log', function ($scope, $location, Exploration, $log) {
+.controller('ExploreCtrl', ['$scope', '$location', 'Exploration', function ($scope, $location, Exploration) {
   // debugger
   $scope.letters= ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
   $scope.facet_selections=[{name:"Collection", value: ":collection_title"}, {name:"Series", value: ":series_title"}, {name:"Episode", value: "episode_title"},];
   $scope.location = $location;
   var facet = "series_title";
   var letter = "A";
-  $scope.exploration=Exploration.query({letter: letter, facet: facet});
-  console.log($scope.exploration);
-  $scope.terms=$scope.exploration[0];
-  // $scope.setFacet = function (facet){
-  //   
-  // };
+  $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) { 
+          console.log(data);
+          $scope.terms=data.facets.seriesTitle.terms;
+          console.log(data.facets.seriesTitle.terms);
+  });
+  $scope.setFacet = function (facet){
+    $scope.exploration=Exploration.query({letter: letter, facet: facet});
+  };
   $scope.setLetter = function (letter) {
     $scope.exploration=Exploration.query({letter: letter, facet: facet});
   };
