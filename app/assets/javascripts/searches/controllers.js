@@ -13,23 +13,33 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
     $scope.query = new Query();
   }
 }])
-.controller('ExploreCtrl', ['$scope', '$location', 'Exploration', function ($scope, $location, Exploration) {
+.controller('ExploreCtrl', ['$scope', 'Exploration', function ($scope, Exploration) {
   // debugger
   $scope.letters= ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
-  $scope.facet_selections=[{name:"Collection", value: ":collection_title"}, {name:"Series", value: ":series_title"}, {name:"Episode", value: "episode_title"},];
-  $scope.location = $location;
+  $scope.facet_selections=[{name:"Collection", value: "collection_title"}, {name:"Series", value: "series_title"}, {name:"Episode", value: "episode_title"},];
   var facet = "series_title";
   var letter = "A";
+  var term = "seriesTitle";
   $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) { 
           console.log(data);
-          $scope.terms=data.facets.seriesTitle.terms;
-          console.log(data.facets.seriesTitle.terms);
+          $scope.terms=data.facets[term].terms;
+          console.log($scope.terms);
   });
   $scope.setFacet = function (facet){
-    $scope.exploration=Exploration.query({letter: letter, facet: facet});
+    $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) {
+      console.log(data);
+      $scope.terms=data.facets[term].terms;
+      console.log(data.facets.seriesTitle.terms);
+      console.log($location);
+    });  
   };
   $scope.setLetter = function (letter) {
-    $scope.exploration=Exploration.query({letter: letter, facet: facet});
+    $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) {
+      console.log(data);
+      $scope.terms=data.facets[term].terms;
+      console.log($scope.terms);
+      console.log($location);
+    });
   };
 }])
 .controller('SearchResultsCtrl', ['$scope', 'Search', 'Loader', '$location', '$routeParams', 'Query', 'Collection', 'SearchResults', function ($scope, Search, Loader, $location, $routeParams, Query, Collection, SearchResults) {
