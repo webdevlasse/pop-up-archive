@@ -66,7 +66,7 @@ class Api::V1::SearchesController < Api::V1::BaseController
   end
   
   def top_terms
-    my_facet=:series_title
+    my_facet =  params[:facet]
     self.search_result = Tire.search index_name, my_facet => 'count' do
       query {string my_facet.to_s + ':*'}
         facet my_facet.to_s do

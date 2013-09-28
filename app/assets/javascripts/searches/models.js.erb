@@ -254,3 +254,6 @@ angular.module('Directory.searches.models', ['RailsModel', 'Directory.items.mode
 .factory('Exploration', ['Model', function (Model) {
   return Model({url:'/api/search/explore', name: 'explore'});
 }])
+.factory('Frequency', ['Model', function (Model) {
+  return Model({url:'/api/search/top_terms', name: 'top_terms'});
+}])

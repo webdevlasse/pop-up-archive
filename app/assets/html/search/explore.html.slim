@@ -1,14 +1,20 @@
 .row
-  .span12
+  .span4 ng-repeat="facet in facet_selections"
     .browse
-     ul 
-      li ng-repeat="letter in letters"
-       a ng-click="setLetter(letter)" {{letter}}
+      h4 {{facet.name}}
+      ul ng-repeat="result in facet.results"
+        li {{result.term}} ({{result.count}})
+.browse_results ng-hide="true"
+  .row 
+    .span12
+      .browse
+       ul 
+        li ng-repeat="letter in letters"
+         a ng-click="setLetter(letter)" {{letter}}
        
-.row
-  .results
-    .span4 
-      li ng-repeat="term in terms" {{term.term}} ({{term.count}})
-    .span4
-    .span4
-      
+  .row 
+    .results
+      .span4 
+        li ng-repeat="term in terms" {{term.term}} ({{term.count}})
+      .span4
+      .span4
