@@ -17,9 +17,7 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
   $scope.letters= ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
   $scope.facet_selections=[{name:"Collection", value: "collection_title", term: "collectionTitle"}, {name:"Series", value: "series_title", term: "seriesTitle"}, {name:"Episode", value: "episode_title", term: "episodeTitle"}, {name:"Tags", value:"tags",term:"tags"}, {name:"Contributors", value: "contributors", term: "contributors"}];
   var facet = $scope.facet_selections[0].value;
-  var letter = $scope.letters[0];
   var term = $scope.facet_selections[0].term;
-
   for(var i=0; i<$scope.facet_selections.length; i++){
     (function(i){
        var selection = $scope.facet_selections[i];     
@@ -28,9 +26,6 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
        });
     })(i);
   };
-  $scope.exploration = Exploration.query({letter: letter, facet: facet}).then(function(data) { 
-    $scope.terms=data.facets[term].terms;
-  });
   $scope.setQuery = function (args) {
     if (args.facet){
       facet= args.facet;
@@ -43,6 +38,10 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
     $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) {
       $scope.terms=data.facets[term].terms;
     });
+  };
+  $scope.newView = false;
+  $scope.toggleView = function () {
+    $scope.newView=!$scope.newView;
   };
 }])
 .controller('SearchResultsCtrl', ['$scope', 'Search', 'Loader', '$location', '$routeParams', 'Query', 'Collection', 'SearchResults', function ($scope, Search, Loader, $location, $routeParams, Query, Collection, SearchResults) {

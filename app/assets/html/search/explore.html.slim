@@ -1,20 +1,23 @@
 .browse_results
-  .row
+  .row ng-hide="newView"
     .span4 ng-repeat="facet in facet_selections"
       h4 {{facet.name}}
       ul 
         li ng-repeat="result in facet.results" {{result.term}} ({{result.count}})
         li  
-          a ng-click="setQuery({facet: facet.value, term: facet.term, name: facet.name, letter: 'A'})"  More...      
-  .row
-    .span12
-      .browse
-        ul 
-          li ng-repeat="letter in letters"
-            a ng-click="setQuery({letter: letter})" {{letter}}  
-  .row 
-    .results
-      .span4 
-        h4 {{name}}
-        ul
-          li ng-repeat="term in terms" {{term.term}} ({{term.count}})
+          a ng-click="setQuery({facet: facet.value, term: facet.term, name: facet.name, letter: 'A'}); toggleView()"  More...  
+  .container ng-show="newView"   
+    .row
+      .span12
+        .browse
+          p
+            a ng-click="toggleView()" Back to All Facets
+          ul 
+            li ng-repeat="letter in letters"
+              a ng-click="setQuery({letter: letter})" {{letter}}  
+    .row 
+      .results
+        .span4 
+          h4 {{name}}
+          ul
+            li ng-repeat="term in terms" {{term.term}} ({{term.count}})
