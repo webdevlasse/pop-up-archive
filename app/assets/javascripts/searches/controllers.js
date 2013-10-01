@@ -15,7 +15,7 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
 }])
 .controller('ExploreCtrl', ['$scope', 'Exploration', 'Frequency', function ($scope, Exploration, Frequency) {
   $scope.letters= ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
-  $scope.facet_selections=[{name:"Collection", value: "collection_title", term: "collectionTitle"}, {name:"Series", value: "series_title", term: "seriesTitle"}, {name:"Episode", value: "episode_title", term: "episodeTitle"}, {name:"Tags", value:"tags",term:"tags"}, {name:"Contributors", value: "contributors", term: "contributors"},{name:"Host", value: "host", term: "host"},{name:"Interviewer", value: "interviewer", term: "interviewer"}];
+  $scope.facet_selections=[{name:"Collection", value: "collection_title", term: "collectionTitle"}, {name:"Series", value: "series_title", term: "seriesTitle"}, {name:"Episode", value: "episode_title", term: "episodeTitle"}, {name:"Tags", value:"tags",term:"tags"}, {name:"Contributors", value: "contributors", term: "contributors"}];
   var facet = $scope.facet_selections[0].value;
   var letter = $scope.letters[0];
   var term = $scope.facet_selections[0].term;
@@ -28,15 +28,18 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
        });
     })(i);
   };
-  $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) { 
+  $scope.exploration = Exploration.query({letter: letter, facet: facet}).then(function(data) { 
     $scope.terms=data.facets[term].terms;
   });
-  $scope.setFacet = function (facet){
-    $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) {
-      $scope.terms=data.facets[term].terms;
-    });  
-  };
-  $scope.setLetter = function (letter) {
+  $scope.setQuery = function (args) {
+    if (args.facet){
+      facet= args.facet;
+      term= args.term;
+      $scope.name= args.name;
+    };
+    if (args.letter){
+      letter= args.letter;
+    };
     $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) {
       $scope.terms=data.facets[term].terms;
     });
