@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Item do
+  before { StripeMock.start }
+  after { StripeMock.stop }
   context "#geographic_location" do
     it "should set the geolocation using Geoloation.for_name" do
       Geolocation.should_receive(:for_name).with("Cambridge, MA")
@@ -12,6 +14,18 @@ describe Item do
 
       record.geographic_location.should eq "Madison, WI"
     end
+  end
+
+  it "can be deleted" do
+    item = FactoryGirl.create :item
+    item.should_receive(:remove_from_index).and_return(true)
+    item.destroy
+  end
+
+  it "public url" do
+    item = FactoryGirl.create :item
+    item.url.should_not be_nil
+    item.url.should eq "http://test.popuparchive.org/collections/#{item.collection_id}/items/#{item.id}"
   end
 
   it "should allow writing to the extra attributes" do

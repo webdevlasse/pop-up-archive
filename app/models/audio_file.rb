@@ -7,10 +7,12 @@ class AudioFile < ActiveRecord::Base
 
   acts_as_paranoid
 
+  before_validation :set_metered
+
   belongs_to :item, :with_deleted => true
   belongs_to :instance
   has_many :tasks, as: :owner
-  has_many :transcripts
+  has_many :transcripts, order: 'created_at desc'
 
   belongs_to :storage_configuration, class_name: "StorageConfiguration", foreign_key: :storage_id
 
@@ -26,6 +28,8 @@ class AudioFile < ActiveRecord::Base
   #default_scope includes(:transcripts)
 
   delegate :collection_title, to: :item
+
+  TRANSCRIBE_RATE_PER_MINUTE = 2.00;
 
   def collection
     instance.try(:item).try(:collection) || item.try(:collection)
@@ -58,7 +62,7 @@ class AudioFile < ActiveRecord::Base
   end
 
   def storage
-    storage_configuration || item.storage
+    storage_configuration || item.try(:storage)
   end
 
   def store_dir(stor=storage)
@@ -91,6 +95,11 @@ class AudioFile < ActiveRecord::Base
 
     save!
   end
+
+  def metered?
+    metered.nil? ? is_metered? : super
+  end
+
 
   def update_from_fixer(params)
 
@@ -180,8 +189,25 @@ class AudioFile < ActiveRecord::Base
     return true
   end
 
-  def order_transcript
-    self.tasks << Tasks::OrderTranscriptTask.new(identifier: 'order_transcript')
+  def order_transcript(user)
+    raise 'cannot create transcript when duration is 0' if (duration.to_i <= 0)
+    task = Tasks::OrderTranscriptTask.new(
+      identifier: 'order_transcript',
+      extras: {
+        user_id: user.id,
+        amount: amount_for_transcript
+      }
+    )
+    self.tasks << task
+    task
+  end
+
+  def amount_for_transcript
+    (duration.to_i / 60.0).ceil * TRANSCRIBE_RATE_PER_MINUTE
+  end
+
+  def add_to_amara(user)
+    self.tasks << Tasks::AddToAmaraTask.new(identifier: 'add_to_amara', extras: { user_id: user.id })
   end
 
   def create_copy_task(orig, dest, stor)
@@ -257,7 +283,7 @@ class AudioFile < ActiveRecord::Base
   end
 
   def transcript_text
-    txt = timed_transcript_text 
+    txt = timed_transcript_text
     txt = JSON.parse(transcript).collect{|i| i['text']}.join("\n") if (txt.blank? && !transcript.blank?)
     txt || ''
   end
@@ -272,11 +298,11 @@ class AudioFile < ActiveRecord::Base
   end
 
   def timed_transcript(language='en-US')
-    transcripts.detect {|t| t.language == language }
+    transcripts.detect{|t| t.language == language }
   end
 
   def process_transcript(json)
-    return false if json.blank?
+    return nil if json.blank?
 
     identifier = Digest::MD5.hexdigest(json)
 
@@ -396,4 +422,14 @@ class AudioFile < ActiveRecord::Base
     uri.to_s
   end
 
+  private
+
+  def set_metered
+    self.metered = is_metered?
+    true
+  end
+
+  def is_metered?
+    storage == StorageConfiguration.popup_storage
+  end
 end

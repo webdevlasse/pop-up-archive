@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-ruby '1.9.3'
+ruby '2.0.0'
 
 gem 'rails', '~> 3.2.0'
 
@@ -64,7 +64,7 @@ gem 'state_machine'
 
 gem 'doorkeeper'
 
-gem "acts_as_paranoid", "~>0.4.0"
+gem "acts_as_paranoid", "~> 0.4.2"
 
 gem 'newrelic_rpm', :github => 'newrelic/rpm', :branch => 'RUBY-1180'
 
@@ -76,16 +76,18 @@ gem 'sanitize'
 
 gem 'soundcloud'
 
-gem 'amara'
+gem 'amara', "~> 0.1.1"
 # gem 'amara', :path => '../amara'
 # gem 'amara', github: 'PRX/amara'
 
 gem 'countries'
 gem 'language_list'
 
+gem 'stripe'
+
 group :assets do
   gem 'sprockets'
-  gem 'sass-rails',   '~> 3.2.3'
+  gem 'sass-rails', '~> 3.2.3'
   gem 'uglifier', '>= 1.0.3'
   gem 'bootstrap-sass'
   gem 'angularjs-rails-resource'
@@ -102,7 +104,6 @@ group :development do
   gem 'guard-rspec'
   gem 'guard-jasmine'
   gem "guard-bundler", ">= 1.0.0"
-  gem "guard-rails", ">= 0.4.0"
  end
 
 group :development, :test do
@@ -126,6 +127,7 @@ group :test do
   gem 'capybara'
   gem 'poltergeist'
   gem 'shoulda-matchers'
+  gem 'stripe-ruby-mock', require: 'stripe_mock'
   # gem 'webmock'
 end
 

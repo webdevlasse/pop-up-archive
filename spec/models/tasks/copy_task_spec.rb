@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Tasks::CopyTask do
+  before { StripeMock.start }
+  after { StripeMock.stop }
 
   it "should set defaults" do
 
@@ -19,7 +21,7 @@ describe Tasks::CopyTask do
   it "should update audio file on complete" do
 
     audio_file = FactoryGirl.create :audio_file
-    storage = FactoryGirl.create :storage_configuration_public
+    storage = FactoryGirl.create :storage_configuration_archive
     storage_id = storage.id
 
     task = Tasks::CopyTask.new(

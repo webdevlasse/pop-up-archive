@@ -14,11 +14,19 @@ class Item < ActiveRecord::Base
   before_update :handle_collection_change, if: :collection_id_changed?
 
   after_save do
-    if deleted_at.nil?
-      self.index.store(self)
-    else
-      self.index.remove(self)
-    end
+    deleted_at.nil? ? store_to_index : remove_from_index
+  end
+
+  after_destroy do
+    remove_from_index
+  end
+
+  def remove_from_index
+    self.index.remove(self)
+  end
+
+  def store_to_index
+    self.index.store(self)
   end
 
   tire do
@@ -114,14 +122,14 @@ class Item < ActiveRecord::Base
 
   scope :publicly_visible, where(is_public: true)
 
-  def self.visible_to_user(user)
-    if user.present?
-      grants = CollectionGrant.arel_table
-      joins(collection: :collection_grants).where(grants[:user_id].eq(user.id).or(arel_table[:is_public].eq(true)))
-    else
-      publicly_visible
-    end
-  end
+  # def self.visible_to_user(user)
+  #   if user.present?
+  #     grants = CollectionGrant.arel_table
+  #     joins(collection: :collection_grants).where(grants[:user_id].eq(user.id).or(arel_table[:is_public].eq(true)))
+  #   else
+  #     publicly_visible
+  #   end
+  # end
 
   serialize :extra, HstoreCoder
 
@@ -129,7 +137,13 @@ class Item < ActiveRecord::Base
 
   accepts_nested_attributes_for :contributions
 
-  @@instance_lock = Mutex.new
+  def token
+    read_attribute(:token) || update_token
+  end
+
+  def url
+    "#{Rails.application.routes.url_helpers.root_url}collections/#{collection_id}/items/#{id}"
+  end
 
   def process_analysis(analysis)
     existing_names = self.entities.collect{|e| e.name || ''}.sort.uniq
@@ -163,10 +177,7 @@ class Item < ActiveRecord::Base
     end
   end
 
-  def token
-    read_attribute(:token) || update_token
-  end
-
+  @@instance_lock = Mutex.new
   def update_token
     @@instance_lock.synchronize do
       begin
@@ -203,7 +214,7 @@ class Item < ActiveRecord::Base
   end
 
   def storage
-    storage_configuration || collection.default_storage
+    storage_configuration || collection.try(:default_storage)
   end
 
   def geographic_location=(name)

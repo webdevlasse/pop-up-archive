@@ -15,6 +15,8 @@ PopUpArchive::Application.routes.draw do
 
   get 'media/:token/:expires/:use/:class/:id/:name.:extension', controller: 'media', action: 'show'
 
+  post 'amara_callback', controller: 'callbacks', action: 'amara'
+
   namespace :api, defaults: { format: 'json' }, path: 'api' do
     scope module: :v1, constraints: ApiVersionConstraint.new(version: 1, default: true) do
       root to: 'status#info'
@@ -36,6 +38,7 @@ PopUpArchive::Application.routes.draw do
           get 'transcript_text',      action: 'transcript_text'  
           get 'upload_to',            action: 'upload_to'
           post 'order_transcript',    action: 'order_transcript'
+          post 'add_to_amara',        action: 'add_to_amara'
 
           # s3 upload actions
           get 'chunk_loaded',         action: 'chunk_loaded'
@@ -54,6 +57,8 @@ PopUpArchive::Application.routes.draw do
       end
 
       resources :timed_texts
+
+      resources :organizations
       
       resources :collections do
         collection do

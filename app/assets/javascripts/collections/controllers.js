@@ -8,42 +8,53 @@ angular.module('Directory.collections.controllers', ['Directory.loader', 'Direct
       $scope.uploadsCollection.fetchItems();
     });
 
+    $scope.storageClass = function (collection) {
+      var s = angular.lowercase(collection.storage) || "aws";
+      return ('storage-' + s);
+    };
+
+
+
 		$scope.tour = {
-      'tempuploads': { 
-        'content': 'If you don\'t specify a collection, audio will be automatically added to temporary uploads. Select your audio and add it to a collection to make it searchable.',
-        'step': 0
-      },
-		  'iapublic': { 
-				'content': 'Your public collections will be<br/>stored at the Internet Archive.<br/>They will be available for anyone<br/>to search, stream, or download.',
+		  'welcome': {
+		    'content': 'First things first: create a collection below. <a href=""> Learn how to organize.</a>',
+		    'step': 0
+		  },
+		  'privacy': { 
+				'content': 'Public collections are available for anyone to search, stream, or download. ',
         'step': 1
-			},
-		  's3private': { 
-				'content': 'Private collections allow you to store your audio so that is visible only to you. Users automatically have two hours of private storage.',
+		  },
+		  'privacy2': { 
+				'content': 'Private collections are visible only to you. You get two free hours of private storage.',
         'step': 2
-			},
-			'edit': { 
-				'content': 'Use batch edit to delete or edit tags for many items at once.',
-        'step': 3
-			},
-      'tutorial1': {
-        'content': 'Hopefully collections are making more sense.<br/>Next let\'s look at uploading.',
-        'step': 4
-      },
-      'tutorial2': {
-        'content': 'Uploads are just a click or drag &amp; drop away &ndash; give it a try!',
-        'step': 5
-      }
+		  },
+		  'upload': {
+		    'content': 'Ready to upload some sound? Click the upload button below.',
+		    'step': 3
+		  },
+		  'collection': {
+		    'content': 'Then, move your item to a collection.',
+		    'step': 4
+		  },
+		  'collection2': {
+		    'content': 'Click the collection title to see your new item.',
+		    'step': 5
+		  },
+		  'view_item': {
+		    'content': 'Click the item title to see transcripts and edit your item.',
+		    'step': 6
+		  },
 		};
 
-    $scope.$on('tutorial-step-shown', function (event) {
-      if (event.targetScope.stepOptions) {
-        var step = event.targetScope.stepOptions.step;
-        switch (step) {
-          case 4: $modal({template: "/assets/collections/tutorial1.html", persist: false, show: true, backdrop: 'static', scope: $scope, modalClass: 'big-modal'}); break;
-          case 5: $modal({template: "/assets/collections/tutorial2.html", persist: false, show: true, backdrop: 'static', scope: $scope, modalClass: 'big-modal'}); break;
-        }
-      }
-    });
+    // $scope.$on('tutorial-step-shown', function (event) {
+    //   if (event.targetScope.stepOptions) {
+    //     var step = event.targetScope.stepOptions.step;
+    //     switch (step) {
+    //       case 4: $modal({template: "/assets/collections/tutorial1.html", persist: false, show: true, backdrop: 'static', scope: $scope, modalClass: 'big-modal'}); break;
+    //       case 5: $modal({template: "/assets/collections/tutorial2.html", persist: false, show: true, backdrop: 'static', scope: $scope, modalClass: 'big-modal'}); break;
+    //     }
+    //   }
+    // });
 		
     $scope.selectedItems = [];
 
@@ -69,7 +80,7 @@ angular.module('Directory.collections.controllers', ['Directory.loader', 'Direct
           $scope.selectedItems.push(item);
         }
       }
-    }
+    };
 
     $scope.selectAll = function (items) {
       angular.forEach(items, function (item) {
@@ -77,7 +88,7 @@ angular.module('Directory.collections.controllers', ['Directory.loader', 'Direct
           $scope.toggleItemSelection(item);
         }
       });
-    }
+    };
 
     $scope.deleteSelection = function () {
       if (confirm("Are you sure you would like to delete these " + $scope.selectedItems.length + " items from My Uploads?\n\nThis is permanent and cannot be undone.")) {
@@ -89,16 +100,16 @@ angular.module('Directory.collections.controllers', ['Directory.loader', 'Direct
         });
         $scope.selectedItems.length = 0;
       }
-    }
+    };
 
     $scope.clearSelection = function () {
       angular.forEach($scope.selectedItems, function (item) {
         item.selected = false;
       })
       $scope.selectedItems.length = 0;
-    }
+    };
 
-    $scope.delete = function(index) {
+    $scope.delete = function (index) {
       var confirmed = confirm("Delete collection and all items?");
       if (!confirmed) {
         return false;
@@ -106,10 +117,15 @@ angular.module('Directory.collections.controllers', ['Directory.loader', 'Direct
 
       var collection = $scope.collections[index];
       collection.deleting = true;
-      collection.delete().then(function() {
+      collection.delete().then(function () {
         $scope.collections.splice(index, 1);
       });
-    }
+    };
+
+    $scope.newCollection = function () {
+      $modal({template: "/assets/collections/form.html", persist: false, show: true, scope: $scope});
+    };
+
   });
 }])
 .controller('CollectionCtrl', ['$scope', '$routeParams', 'Collection', 'Loader', 'Item', '$location', '$timeout', function CollectionCtrl($scope, $routeParams, Collection, Loader, Item, $location, $timeout) {
@@ -149,11 +165,13 @@ angular.module('Directory.collections.controllers', ['Directory.loader', 'Direct
 }])
 .controller('CollectionFormCtrl', ['$scope', 'Collection', 'Me', function CollectionFormCtrl($scope, Collection, Me) {
 
+  $scope.collection = new Collection();
+
   $scope.edit = function (collection) {
     $scope.collection = collection;
   }
 
-  $scope.submit = function() {
+  $scope.submit = function () {
 
     // make sure this is a resource object.
     var collection = new Collection($scope.collection);
@@ -164,13 +182,13 @@ angular.module('Directory.collections.controllers', ['Directory.loader', 'Direct
       collection.create().then(function (data) {
         $scope.collections.push(collection);
         Me.authenticated(function (me) {
-          me.collectionIds.push(data.id);
+          me.collectionIds.push(collection.id);
         });
       });
     }
   }
 }])
-.controller('UploadCategorizationCtrl', ['$scope', function($scope) {
+.controller('UploadCategorizationCtrl', ['$scope', function ($scope) {
   var dismiss = $scope.dismiss;
 
   var currentCollection;
@@ -212,12 +230,6 @@ angular.module('Directory.collections.controllers', ['Directory.loader', 'Direct
     });
     $scope.dismiss();
   }
-}])
-.controller('NewPublicCollectionCtrl', ['$scope', 'Collection', function ($scope, Collection) {
-  $scope.collection = new Collection({itemsVisibleByDefault: true});
-}])
-.controller('NewPrivateCollectionCtrl', ['$scope', 'Collection', function ($scope, Collection) {
-  $scope.collection = new Collection({itemsVisibleByDefault: false});
 }])
 .controller('BatchEditCtrl', ['$scope', 'Loader', 'Collection', 'Me', function ($scope, Loader, Collection, Me) {
   Me.authenticated(function (currentUser) {

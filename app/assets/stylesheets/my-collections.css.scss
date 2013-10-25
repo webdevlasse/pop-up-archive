@@ -5,6 +5,7 @@ ul.collections {
   margin: 0;
 
   li {
+    position:relative;
     overflow: hidden;
     width: $collection-size;
     height: $collection-size;
@@ -26,14 +27,6 @@ ul.collections {
       width: $collection-size;
       font-size: $collection-size - 30px;
     }
-  }
-
-  li.add-collection {
-    border: 3px dashed #ddd;
-    background: transparent;
-
-    width: $collection-size - 6px;
-    height: $collection-size - 6px;
 
     a {
       color: #000;
@@ -46,6 +39,40 @@ ul.collections {
        color: #f2cfa5;
      }
     }
+
+    .box {
+      margin-top: 10px;
+      margin-left: 4px;
+      background: image-url('box.svg') no-repeat center;
+      margin-left:auto;
+      margin-right:auto;
+      display: block;
+      height: 75px;
+      width: 75px;
+    }
+
+    .public-ribbon {
+      background: image-url('public-collection-ribbon.png') no-repeat;
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 1000;
+      height: 54px;
+      width: 54px;
+      text-indent: -9000px;
+    }
+
+
+  }
+
+
+  li.add-collection {
+    border: 3px dashed #ddd;
+    background: transparent;
+
+    width: $collection-size - 6px;
+    height: $collection-size - 6px;
   }
   i.icon-plus {
     font-size: 136px;
@@ -172,7 +199,7 @@ div.collections, div.holding-cell, div.items {
 }
 
 div.collections {
-  max-height: 250px;
+  max-height: 500px;
   padding-top: 10px;
   overflow-x: hidden;
   overflow-y: auto;
@@ -258,4 +285,41 @@ div.holding-cell {
 
 .faq h2{
 	color: #000;
+}
+
+//Tutorial
+.tutorial-step {
+  font-family: soleil, helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 24px;
+
+  .tutorial-navigation {
+    margin-top: 8px;
+  }
+}
+
+.big-modal {
+
+  .modal-body {
+    max-height: 1100px;
+    color: white;
+    text-align: center;
+  }
+
+  .dark {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    box-shadow: none;
+  }
+
+}
+
+@media (max-width: 460px) { 
+	div.big-modal{
+	  width: 460px;
+	  margin-left: -230px;}
+	img{
+		display: none;
+	}
 }

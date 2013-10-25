@@ -83,7 +83,7 @@ GEM
       activerecord (>= 3.0)
     acts_as_paranoid (0.4.2)
       activerecord (~> 3.2)
-    amara (0.0.4)
+    amara (0.1.1)
       activesupport
       excon
       faraday
@@ -103,6 +103,7 @@ GEM
       erubis (>= 2.6.6)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    blankslate (3.1.2)
     bootstrap-sass (2.3.2.1)
       sass (~> 3.2)
     bootstrap_form (1.0.0)
@@ -135,6 +136,7 @@ GEM
     curb (0.8.4)
     currencies (0.4.2)
     dalli (2.6.4)
+    dante (0.1.5)
     debug_inspector (0.0.2)
     debugger (1.6.1)
       columnize (>= 0.3.1)
@@ -200,8 +202,6 @@ GEM
       multi_json
       thor
       tilt
-    guard-rails (0.4.7)
-      guard (>= 0.2.2)
     guard-rspec (3.0.2)
       guard (>= 1.8)
       rspec (~> 2.13)
@@ -229,6 +229,11 @@ GEM
       jasmine-core (~> 1.3)
       rails (>= 3.1.0)
       sprockets-rails
+    jimson-temp (0.9.5)
+      blankslate (>= 3.1.2)
+      multi_json (~> 1.0)
+      rack (~> 1.4)
+      rest-client (~> 1.0)
     journey (1.0.4)
     json (1.8.0)
     jwt (0.1.8)
@@ -415,6 +420,13 @@ GEM
     sprockets-rails (0.0.1)
       sprockets (>= 1.0.2)
     state_machine (1.2.0)
+    stripe (1.8.7)
+      multi_json (>= 1.0.4, < 2)
+      rest-client (~> 1.4)
+    stripe-ruby-mock (1.8.4.9)
+      dante (>= 0.1.5)
+      jimson-temp
+      stripe (>= 1.8.4)
     strong_parameters (0.2.1)
       actionpack (~> 3.0)
       activemodel (~> 3.0)
@@ -458,8 +470,8 @@ PLATFORMS
 DEPENDENCIES
   activerecord-postgres-hstore (~> 0.6.0)
   acts_as_list
-  acts_as_paranoid (~> 0.4.0)
-  amara
+  acts_as_paranoid (~> 0.4.2)
+  amara (~> 0.1.1)
   angularjs-rails-resource
   autoscaler (~> 0.2.0)
   better_errors
@@ -490,7 +502,6 @@ DEPENDENCIES
   growl
   guard-bundler (>= 1.0.0)
   guard-jasmine
-  guard-rails (>= 0.4.0)
   guard-rspec
   heroku-api (~> 0.3.10)
   jasmine
@@ -531,6 +542,8 @@ DEPENDENCIES
   spring
   sprockets
   state_machine
+  stripe
+  stripe-ruby-mock
   strong_parameters
   terminal-notifier-guard
   tire

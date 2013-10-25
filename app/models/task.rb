@@ -45,6 +45,15 @@ class Task < ActiveRecord::Base
 
   end
 
+  def shared_attributes
+    []
+  end
+
+  def type_name
+    tn = self.class.name.demodulize.sub(/Task$/, '').underscore
+    tn.blank? ? 'task' : tn
+  end
+
   def serialize_extra(name)
     self.extras = {} unless extras
     self.extras[name] = self.extras[name].to_json if (self.extras[name] && !self.extras[name].is_a?(String))

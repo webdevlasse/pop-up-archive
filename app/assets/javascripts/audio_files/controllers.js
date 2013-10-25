@@ -1,7 +1,30 @@
 angular.module("Directory.audioFiles.controllers", ['ngPlayer'])
-.controller("AudioFileCtrl", ['$scope', '$timeout', 'Player', 'Me', 'TimedText', 'AudioFile', function($scope, $timeout, Player, Me, TimedText, AudioFile) {
+.controller("AudioFileCtrl", ['$scope', '$timeout', '$modal', 'Player', 'Me', 'TimedText', 'AudioFile', function($scope, $timeout, $modal, Player, Me, TimedText, AudioFile) {
   $scope.fileUrl = $scope.audioFile.url;
-  
+
+  $scope.downloadLinks = [
+      {
+        text: 'Text Format',
+        target: '_self',
+        href: "/api/items/" + $scope.item.id + "/audio_files/" + $scope.audioFile.id + "/transcript.txt"
+      },
+      {
+        text: 'SRT Format',
+        target: '_self',
+        href: "/api/items/" + $scope.item.id + "/audio_files/" + $scope.audioFile.id + "/transcript.srt"
+      },
+      {
+        text: 'XML Format (W3C Transcript)',
+        target: '_self',
+        href: "/api/items/" + $scope.item.id + "/audio_files/" + $scope.audioFile.id + "/transcript.xml"
+      },
+      {
+        text: 'JSON Format',
+        target: '_self',
+        href: "/api/items/" + $scope.item.id + "/audio_files/" + $scope.audioFile.id + "/transcript.json"
+      }
+  ];
+
   $scope.play = function () {
     Player.play($scope.fileUrl);
   }
@@ -24,20 +47,77 @@ angular.module("Directory.audioFiles.controllers", ['ngPlayer'])
 
   Me.authenticated(function (me) {
 
+    // if (me.canEdit($scope.item)) {
+    //   $scope.downloadLinks.unshift({
+    //     text: 'Audio File',
+    //     target: '_self',
+    //     href: $scope.audioFile.urls[0];
+    //   });
+    // }
+
     $scope.saveText = function(text) {
       var tt = new TimedText(text);
       tt.update();
     };
 
-    $scope.orderTranscript = function (audioFile) {
-      var af = new AudioFile(audioFile);
-      af.itemId = $scope.item.id;
-      
-      console.log("order transcript for audio:", af);
-      return af.orderTranscript();
+    $scope.orderTranscript = function () {
+      $scope.orderTranscriptModal = $modal({template: "/assets/audio_files/order_transcript.html", persist: false, show: true, backdrop: 'static', scope: $scope, modalClass: 'order-transcript-modal'});
+      return;
+    };
+
+    $scope.addToAmara = function () {
+      return (new AudioFile($scope.audioFile)).addToAmara(me);
+    };
+
+    $scope.showOrderTranscript = function () {
+      return (new AudioFile($scope.audioFile)).canOrderTranscript(me);
+    };
+
+    $scope.showTranscriptInProgress = function () {
+      return (new AudioFile($scope.audioFile)).isTranscriptOrdered();
+    };
+
+    $scope.showSendToAmara = function () {
+      return (new AudioFile($scope.audioFile)).canSendToAmara(me);
     };
 
   });
+
+}])
+.controller("OrderTranscriptFormCtrl", ['$scope', '$window', '$q', 'Me', 'AudioFile', function($scope, $window, $q, Me, AudioFile) {
+
+  Me.authenticated(function (me) {
+
+    $scope.length = function() {
+      var mins = (new AudioFile($scope.audioFile)).durationMinutes();
+      var label = "minutes";
+      if (mins == 1) { label = "minute"; }
+      return (mins + ' ' + label);
+    }
+
+    $scope.price = function() {
+      return (new AudioFile($scope.audioFile)).transcribePrice();
+    }
+
+    $scope.submit = function () {
+      // $scope.audioFile = new AudioFile($scope.audioFile);
+      // $scope.audioFile.itemId = $scope.item.id;
+      // return $scope.audioFile.orderTranscript();
+      $scope.close();
+      return;
+    }
+
+  });
+
+  $scope.clear = function () {
+    $scope.hideOrderTranscriptModal();
+  }
+
+  $scope.hideOrderTranscriptModal = function () {
+    $q.when($scope.orderTranscriptModal).then( function (modalEl) {
+      modalEl.modal('hide');
+    });
+  } 
 
 }])
 .controller("PersistentPlayerCtrl", ["$scope", 'Player', function ($scope, Player) {
