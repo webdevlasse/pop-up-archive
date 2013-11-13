@@ -1,0 +1,112 @@
+<div id="about">
+<div id="pages_container">
+<div class="svg"></div>
+
+<div class="slide" id="page_1">
+<div class="content-holder">
+<div class="content">
+<h1>The web is getting noisier.</h1>
+Pop Up Archive organizes sound so it can be found and reused. Our simple tools are helping journalists, oral history collections, and media organizations around the world.
+<a class="internal-link" href="#2"> Learn More.</a>
+</div>
+</div>
+</div>
+
+<div class="slide" id="page_2">
+<div class="content-holder">
+<div class="content">
+<h1>Journalists, broadcasters, &amp; producers</h1>
+You record and tell stories — you don’t archive them. But memories fade, and material can easily get lost or degrade. When it’s easy to archive, it’s easy to find the threads that create stories.
+</div>
+</div>
+</div>
+
+<div class="slide" id="page_3">
+<div class="content-holder">
+<div class="content">
+<h1>Save everything.</h1>
+Create a free account and start uploading. Archive entire collections of raw audio, and completed work. No software to install, no server to manage.
+</div>
+</div>
+</div>
+
+<div class="slide" id="page_4">
+<div class="content-holder">
+<div class="content">
+<h1>Sound indexed automatically.</h1>
+All kinds of sound collections benefit from immediate searchability, marked by time-stamps so you can find — and hear — exactly what you’re looking for. We detect keywords in your audio and generate standards-compliant metadata (PBCore).
+
+</div>
+</div>
+</div>
+
+<div class="slide" id="page_5">
+<div class="content-holder">
+<div class="content">
+<h1>Liberate treasure troves of sound.</h1>
+Robust search is great for research and production. Explore your sounds and the public repository by keyword, date, contributor, location, and more. Trapped voices from around the world are waiting to be discovered.
+</div>
+</div>
+</div>
+
+<div class="slide" id="page_6">
+<div class="content-holder">
+<div class="content">
+<h1>Open to all, or keep it to yourself</h1>
+Producers and newsrooms can privately access their own content anywhere, anytime. 
+
+Archives can add material to a searchable, streaming repository. 
+
+</div>
+</div>
+</div>
+<div class="slide" id="page_7">
+<div class="content-holder">
+<div class="content">
+<h1>Built to work. Give it a try.</h1>
+We’ve done the heavy lifting and put lots of tools in one place: transcription, cataloging, storage, preservation, web formatting, and processing huge backlogs of digital sound. 
+
+What are you waiting for?
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+
+  var hoverHandlerOn = true, clickHandlerOn = true;
+  var MAX_NOISE_GAIN = 0.5;
+  var MAX_AUDIO_GAIN = 1;
+  var COLORS = ['#BA4641', '#B85D37', '#997067', '#FF974D', '#F2CFA5', '#FFB959', '#B59B6D', '#85D0F1', '#5970B1', '#8581A1'];
+  var RED_COLORS = ['#BA4641','#B85D37', '#997067'];
+  var YELLOW_COLORS = ['#FF974D', '#F2CFA5', '#FFB959', '#B59B6D'];
+  var BLUE_COLORS = [ '#85D0F1', '#5970B1', '#8581A1'];
+  var CONNECT_COLOR = "#C9B82C";
+  var OUTER_CIRCLE_RADIUS = 30;
+  var OUTER_CIRCLE_STROKE_WIDTH = 5;
+  var MAX_INNER_CIRCLE_RADIUS = 25;
+  var MIN_INNER_CIRCLE_RADIUS = 10;
+  var MAX_GROWTH_RADIUS = 52;
+  var CLICK_DECREASE_IN_RADIUS= 10;
+  var COLOR_TIME = 50;
+  var GROWTH_TIME = 300;
+  var RESET_TIME = 500;
+  var CLICK_TIME = 100;
+  var CONNECT_TIME = 1000;
+  var BROADCAST_FREQUENCY = 700;
+  var BROADCAST_STROKE_WIDTH = 2;
+  var BROADCAST_TIME_PER_BOX = 3000;
+  var MAX_BROADCAST_RADIUS_IN_BOX_WIDTHS = 3;
+  var BROADCAST_NEIGHBOUR_OPACITY = 0.4;
+  var BROADCAST_NEIGHBOUR_MOVE_TIME = 1000;
+
+  var AUDIO_ROOT = "http://popup-www-site.s3.amazonaws.com/files/audio/"
+  var AUDIO_SOURCES = ["MLKDream", "sc_post", "George_Foreman", "HasanAli", "Kelley", "London_radio_football", "London_street_dog_bark", "London_street_music", "Salman_Rushdie"];
+  var MAIN_AUDIO_SOURCE = "sc_post";
+</script>
+<script>
+	var $ = jQuery;
+</script> 
