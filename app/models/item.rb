@@ -44,9 +44,16 @@ class Item < ActiveRecord::Base
       indexes :description,           type: 'string'
       indexes :identifier,            type: 'string',  boost: 2.0
       indexes :title,                 type: 'string',  boost: 2.0
-      indexes :tags,                  type: 'string',  index_name: "tag",    index: "not_analyzed"
-      indexes :contributors,          type: 'string',  index_name: "contributor"
-      indexes :physical_location,     type: 'string'
+      
+      indexes :tags, type: 'nested' do
+        indexes :value, type: 'string',  index_name: "tag",    index: "not_analyzed"
+      end
+      
+      indexes :contributors, type: 'nested' do
+         indexes :value, type: 'string',  index_name: "contributor", index: "not_analyzed"
+      end
+
+      indexes :physical_location, type: 'string'
 
       indexes :transcripts do
         indexes :audio_file_id, type: 'long', index: "not_analyzed"
@@ -60,7 +67,7 @@ class Item < ActiveRecord::Base
         indexes :name
         indexes :position, type: 'geo_point'
       end
-
+      
       indexes :confirmed_entities do
         indexes :entity, type: 'string', boost: 2.0
         indexes :category, type: 'string', include_in_all: false
@@ -82,7 +89,9 @@ class Item < ActiveRecord::Base
       end
 
       STANDARD_ROLES.each do |role|
-        indexes role.pluralize.to_sym, type: 'string', include_in_all: false, index_name: role, index: "not_analyzed"
+        indexes role.pluralize.to_sym, type: 'nested' do
+          indexes :value, type: 'string', include_in_all: false, index_name: role, index: "not_analyzed"
+        end
       end
 
     end
