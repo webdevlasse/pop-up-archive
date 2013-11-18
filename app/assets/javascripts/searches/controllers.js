@@ -13,38 +13,8 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
     $scope.query = new Query();
   }
 }])
-.controller('ExploreCtrl', ['$scope', 'Exploration', 'Frequency', function ($scope, Exploration, Frequency) {
-  $scope.letters= ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
-  $scope.facet_selections=[{name:"Collection", value: "collection_title", term: "collectionTitle"}, {name:"Series", value: "series_title", term: "seriesTitle"}, {name:"Episode", value: "episode_title", term: "episodeTitle"}, {name:"Tags", value:"tags",term:"tags"}, {name:"Contributors", value: "contributors", term: "contributors"}];
-  var facet = $scope.facet_selections[0].value;
-  var term = $scope.facet_selections[0].term;
-  for(var i=0; i<$scope.facet_selections.length; i++){
-    (function(i){
-       var selection = $scope.facet_selections[i];     
-       Frequency.query({facet: selection.value}).then(function(data) {
-            $scope.facet_selections[i].results=data.facets[selection.term].terms;
-       });
-    })(i);
-  };
-  $scope.setQuery = function (args) {
-    if (args.facet){
-      facet= args.facet;
-      term= args.term;
-      $scope.name= args.name;
-    };
-    if (args.letter){
-      letter= args.letter;
-    };
-    $scope.exploration=Exploration.query({letter: letter, facet: facet}).then(function(data) {
-      $scope.terms=data.facets[term].terms;
-    });
-  };
-  $scope.newView = false;
-  $scope.toggleView = function () {
-    $scope.newView=!$scope.newView;
-  };
-}])
-.controller('SearchResultsCtrl', ['$scope', 'Search', 'Loader', '$location', '$routeParams', 'Query', 'Collection', 'SearchResults', function ($scope, Search, Loader, $location, $routeParams, Query, Collection, SearchResults) {
+
+.controller('SearchResultsCtrl', ['$scope', 'Search', 'Loader', '$location', '$routeParams', 'Query', 'Collection', 'SearchResults', '$http', function ($scope, Search, Loader, $location, $routeParams, Query, Collection, SearchResults, $http) {
   $scope.location = $location;
   
   $scope.$watch('location.search().query', function (searchquery) {
@@ -70,8 +40,8 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
     fetchPage();
   }
 
-
   $scope.addSearchFilter = function (filter) {
+    $location.path('/search');
     $scope.query.add(filter.field+":"+'"'+filter.name+'"');
   }
 
@@ -101,4 +71,65 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
       SearchResults.setResults(search);
     });
   }
+  
+  $scope.letters= ["A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+  
+  $scope.facet_selections=[{name:"Collection", value: "collection_title", term: "collectionTitle"}, {name:"Series", value: "series_title", term: "seriesTitle"}, {name:"Episode", value: "episode_title", term: "episodeTitle"}, {name:"Tags", value:"tags",term:"tags"}, {name:"Contributors", value: "contributors", term: "contributors"}];
+  
+  // var facet = $scope.facet_selections[0].value;
+  // 
+  // var term = $scope.facet_selections[0].term;
+  
+  // for(var i=0; i<$scope.facet_selections.length; i++){
+  //   (function(i){
+  //      var selection = $scope.facet_selections[i];     
+  //      Frequency.query({facet: selection.value}).then(function(data) {
+  //           $scope.facet_selections[i].results=data.facets[selection.term].terms;
+  //      });
+  //   })(i);
+  // };
+  
+  $scope.setQuery = function (args) {
+    debugger
+    if (args.facet){
+      if (args.facet == "Collection"){
+        term= "collectionTitle";
+        facet= "collection_title";
+      }
+      if (args.facet == "interviewer"){
+        term="interviewers";
+        facet="interviewers";
+      }
+      
+      else if (args.facet=="tag"){
+        term= "tags";
+        facet="tags";
+      }
+      else if (args.facet == "series"){
+        term="seriesTitle";
+        facet="series_title";
+      }
+      else if (args.facet == "episode"){
+        term="episodeTitle";
+        facet="episode_title";
+      }
+    };
+    if (args.letter){
+      letter= args.letter;
+    };
+    
+    console.log(facet, letter);
+    $http.get('/api/search?facets['+facet+'][regex]='+letter+'.*&facets['+facet+'][regex_flags]=CASE_INSENSITIVE').success(function(data) {
+        // you can do some processing here
+        $scope.terms = data.facets[facet].terms;
+        console.log($scope.terms);
+    });
+  };
+  
+  $scope.newView = false;
+  
+  $scope.toggleView = function () {
+    $scope.newView=!$scope.newView;
+  };
+  
 }]);

@@ -60,9 +60,9 @@ if(window.location.hash=="#_=_"){window.location.hash = ""}
       reloadOnSearch: false,
       title: "Search"
     })
-    .when('/search/explore', {
+    .when('/explore', {
       templateUrl: "<%= asset_path 'search/explore.html' %>",
-      controller: "ExploreCtrl",
+      controller: "SearchResultsCtrl",
       title: "Explore"
     })
     .when('/about', {

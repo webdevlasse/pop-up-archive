@@ -50,32 +50,6 @@ class Api::V1::SearchesController < Api::V1::BaseController
     
     respond_with :api, search_result
   end
-  
-  def explore
-    my_letter = params[:letter]
-    my_facet = params[:facet]
-    #get alphabetical tire results with term and count only
-    self.search_result = Tire.search index_name, my_facet => 'count' do 
-      query {string my_facet.to_s + ':' + my_letter + '*'}
-        facet my_facet.to_s do
-          terms my_facet, :order => 'term'
-      end
-       
-    end.results  
-    respond_with :api, search_result
-  end
-  
-  def top_terms
-    my_facet =  params[:facet]
-    self.search_result = Tire.search index_name, my_facet => 'count' do
-      query {string my_facet.to_s + ':*'}
-        facet my_facet.to_s do
-          terms my_facet
-      end
-      
-    end.results  
-    respond_with :api, search_result
-  end 
       
     else
   
