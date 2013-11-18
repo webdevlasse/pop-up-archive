@@ -90,26 +90,38 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
   // };
   
   $scope.setQuery = function (args) {
-    debugger
+    console.log(args.facet);
+    
     if (args.facet){
       if (args.facet == "Collection"){
         term= "collectionTitle";
         facet= "collection_title";
       }
-      if (args.facet == "interviewer"){
+      else if (args.facet == "interviewer"){
         term="interviewers";
         facet="interviewers";
       }
-      
+      else if (args.facet == "interviewee"){
+        term="interviewees";
+        facet="interviewees";
+      }
+      else if (args.facet == "producer"){
+        term="producers";
+        facet="producers";
+      }
+      else if (args.facet == "host"){
+        term="hosts";
+        facet="hosts";
+      }
       else if (args.facet=="tag"){
         term= "tags";
         facet="tags";
       }
-      else if (args.facet == "series"){
+      else if (args.facet == "seriesTitle"){
         term="seriesTitle";
         facet="series_title";
       }
-      else if (args.facet == "episode"){
+      else if (args.facet == "episodeTitle"){
         term="episodeTitle";
         facet="episode_title";
       }
@@ -120,7 +132,6 @@ angular.module('Directory.searches.controllers', ['Directory.loader', 'Directory
     
     console.log(facet, letter);
     $http.get('/api/search?facets['+facet+'][regex]='+letter+'.*&facets['+facet+'][regex_flags]=CASE_INSENSITIVE').success(function(data) {
-        // you can do some processing here
         $scope.terms = data.facets[facet].terms;
         console.log($scope.terms);
     });
