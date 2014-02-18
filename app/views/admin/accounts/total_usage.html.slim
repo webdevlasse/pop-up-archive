@@ -12,15 +12,15 @@ html
   body
     h1 Accounts and Total Usage
     #content
-      p Showing all the Users and the Total Minutes of sound
-      == yield
+      p Showing all the Users and the Total Hours of sound
+      == yield    
       - unless @accounts.empty?
         table
           thead
             tr
               th user id
               th plan limit
-              th total minutes on pua
+              th total hours on pua
               th.empty
               th user name
               th email
@@ -28,8 +28,8 @@ html
           - @accounts.each do |account|
             tr
               td = account.id
-              td = account.pop_up_hours_cache.to_i * 3600
-              td = account.used_metered_storage + account.used_unmetered_storage 
+              td = account.pop_up_hours_cache.to_s + "hrs"
+              td = ((account.used_metered_storage + account.used_unmetered_storage) / 3600).to_f.to_s + "hrs" 
 
               td.empty
               td = account.name
@@ -38,5 +38,6 @@ html
           thead
             tr 
               th Total Hours of Sound on Pop Up Archive
-              td = total_hours_on_pua   
+              td = total_time_in_hours 
+              td = total_hours_on_pua  
  
