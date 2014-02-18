@@ -20,17 +20,24 @@ html
             tr
               th user id
               th plan limit
-              th total hours on pua
+              th total hours stored on S3 on pua
+              th total hours stored on IA on pua
               th.empty
               th user name
               th email
           tbody
+          - @accounts = User.paginate(:page => params[:page],
+                                   :per_page => 5,
+                                   :order => ('used_metered_storage_cache DESC,
+                                                               created_at DESC'))
           - @accounts.each do |account|
             tr
               td = account.id
-              td = account.pop_up_hours_cache.to_s + "hrs"
-              td = ((account.used_metered_storage + account.used_unmetered_storage) / 3600).to_f.to_s + "hrs" 
-
+              td = account.pop_up_hours_cache.to_s + " hrs"
+              - metered_hours_and_minutes = account.used_metered_storage.divmod(3600)
+              td = metered_hours_and_minutes[0].to_s + " hrs" + " " + metered_hours_and_minutes[1].ceil.to_s + " secs"
+              - unmetered_hours_and_minutes = account.used_unmetered_storage.divmod(3600)
+              td = unmetered_hours_and_minutes[0].to_s + " hrs" + " " + unmetered_hours_and_minutes[1].ceil.to_s + "secs"
               td.empty
               td = account.name
               td = link_to account.email, "mailto:#{account.email}"
