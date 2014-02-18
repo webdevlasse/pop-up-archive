@@ -3,4 +3,9 @@ class Admin::AccountsController < Admin::BaseController
   def index
     @accounts = @accounts.over_limits
   end
+
+  def total_usage
+    @accounts = @accounts
+  end  
+
 end
